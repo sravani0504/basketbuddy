@@ -1,21 +1,22 @@
 package com.gladiator.BasketBuddy.view.composable
 
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ShoppingCart
 
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 
@@ -25,39 +26,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import com.gladiator.BasketBuddy.R
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
+fun ListScreen() {
     val hint = "Search for groups..."
 
     Column {
-        TopBar("Collaborations", onBackClick = {})
-        Collaborations(
+        TopBar("Lists", onBackClick = {})
+        ListDisplayScreen(
             hint = hint,
-            onSearch = { query ->
-                println("Searching for: $query")
+            onSearch = { message ->
+                println("Searching for: $message")
             }
         )
         Spacer(modifier = Modifier.height(500.dp))
+        AddListIcon {  }
         BasketBuddyBottomNav()
     }
 }
 
 @Composable
-fun Collaborations(
+fun ListDisplayScreen(
     hint: String,
     onSearch: (String) -> Unit
 ) {
-    var query by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        value = query,
-        onValueChange = { query = it },
+        value = message,
+        onValueChange = { message = it },
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
@@ -70,12 +75,28 @@ fun Collaborations(
         },
     )
 
-    LaunchedEffect(query) {
-        onSearch(query)
+    LaunchedEffect(message) {
+        onSearch(message)
     }
 }
 
-fun onHomeClick(){}
-fun onGroupClick(){}
-fun onListClick(){}
+fun HomeClick(){}
+fun GroupClick(){}
+fun ListClick(){}
 
+@Composable
+fun AddListIcon(onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        IconButton(onClick = onClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.outline_playlist_add_24),
+                contentDescription = "Add List",
+                modifier = Modifier.size(42.dp)
+            )
+        }
+    }
+}

@@ -36,6 +36,7 @@ fun Preview() {
             println("Searching for: $query")
         }
     )
+    BasketBuddyBottomNav()
 }
 
 @Composable
@@ -65,42 +66,7 @@ fun Collaborations(
     }
 }
 
+fun onHomeClick(){}
+fun onCartClick(){}
+fun onProfileClick(){}
 
-@Composable
-fun BasketBuddyBottomNav(
-    onHomeClick: () -> Unit,
-    onCartClick: () -> Unit,
-    onProfileClick: () -> Unit
-) {
-    var selectedIndex by remember { mutableStateOf(0) }
-
-    NavigationBar {
-        NavigationBarItem(
-            selected = selectedIndex == 0,
-            onClick = {
-                selectedIndex = 0
-                onHomeClick()
-            },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
-            label = { Text("Home") }
-        )
-        NavigationBarItem(
-            selected = selectedIndex == 1,
-            onClick = {
-                selectedIndex = 1
-                onCartClick()
-            },
-            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Cart") },
-            label = { Text("Cart") }
-        )
-        NavigationBarItem(
-            selected = selectedIndex == 2,
-            onClick = {
-                selectedIndex = 2
-                onProfileClick()
-            },
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
-            label = { Text("Profile") }
-        )
-    }
-}

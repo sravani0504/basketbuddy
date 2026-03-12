@@ -33,11 +33,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.gladiator.BasketBuddy.viewmodel.LoginAction
 import com.gladiator.BasketBuddy.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel,onLoginSuccess: () -> Unit = {},modifier: Modifier= Modifier){
+fun LoginScreen(navController: NavController,viewModel: LoginViewModel,onLoginSuccess: () -> Unit = {},modifier: Modifier= Modifier){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -119,9 +120,9 @@ fun LoginScreen(viewModel: LoginViewModel,onLoginSuccess: () -> Unit = {},modifi
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun LoginScreenPreview(){
-    LoginScreen(viewModel())
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun LoginScreenPreview(){
+//    LoginScreen(viewModel())
+//
+//}

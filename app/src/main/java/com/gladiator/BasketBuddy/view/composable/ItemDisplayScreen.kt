@@ -1,5 +1,7 @@
 package com.gladiator.BasketBuddy.view.composable
-import androidx.compose.foundation.layout.Arrangement
+
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -27,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,19 +53,22 @@ fun ItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 10.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "$index. ${item.itemName}",
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF5A3E2B)
                 )
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -68,23 +76,27 @@ fun ItemCard(
                     onClick = onDecrement,
                     enabled = item.quantity > 1
                 ) {
-                    Text("-", fontSize = 18.sp)
+                    Text("-", fontSize = 20.sp,
+                        color = Color(0xFFB08968)
+                    )
                 }
-
                 Text(
                     text = item.quantity.toString(),
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
                 )
-
                 IconButton(onClick = onIncrement) {
-                    Text("+", fontSize = 18.sp)
+                    Text("+", fontSize = 20.sp,
+                        color = Color(0xFFB08968)
+                    )
                 }
             }
 
             Text(
                 text = item.itemDescription,
                 fontSize = 14.sp,
-                modifier = Modifier.padding(top = 4.dp)
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 6.dp)
             )
         }
     }
@@ -118,7 +130,7 @@ fun ItemList(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
         itemsIndexed(items) { index, item ->
             ItemCard(
@@ -179,7 +191,9 @@ fun ItemDisplayScreen(
     val bottomBarHeight = 64.dp
     val fabBottomPadding = bottomBarHeight + 16.dp
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()
+        .background(Color(0xFFF5EBDD))
+    ) {
         TopBar(title = "Groceries", onBackClick = { navController.popBackStack() })
 
         Box(modifier = Modifier.weight(1f)) {
@@ -195,9 +209,14 @@ fun ItemDisplayScreen(
                         navController.navigate("summaryscreen")
                     },
                     modifier = Modifier
-                        .padding(8.dp).align(Alignment.CenterHorizontally)
+                        .padding(16.dp).align(Alignment.CenterHorizontally),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB08968)),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Save")
+                    Text("Save",
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
                 }
             }
             // === Add (+) Floating Button, above the bottom nav bar ===
@@ -207,17 +226,16 @@ fun ItemDisplayScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                containerColor = Color(0xFFB08968)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add Item"
+                    contentDescription = "Add Item",
+                    tint = Color.White
                 )
             }
         }
-
-
-
         BasketBuddyBottomNav(navController)
     }
 }

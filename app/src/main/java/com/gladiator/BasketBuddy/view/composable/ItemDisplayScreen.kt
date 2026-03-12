@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -102,7 +101,7 @@ fun ItemList(items: List<Item>) {
 
 @Preview(showBackground = true)
 @Composable
-fun ItemScreenPreview(){
+fun ItemDisplayScreen(){
     val sampleItems=listOf(Item("Milk", "1 litre packet"),
         Item("Bread","Whole Wheat bread"))
     Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween){

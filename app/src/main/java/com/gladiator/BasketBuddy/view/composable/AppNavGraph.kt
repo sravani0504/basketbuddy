@@ -49,7 +49,7 @@ fun AppNavGraph(navController: NavHostController){
         }
 
         composable("itemDisplay"){
-            ItemDisplayScreen(navController)
+            ItemDisplayScreen()
         }
 
         composable("addList"){

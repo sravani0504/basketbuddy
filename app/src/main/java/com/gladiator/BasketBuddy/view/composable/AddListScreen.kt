@@ -51,7 +51,7 @@ fun AddListScreen(navController: NavController) {
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = { },
+                onClick = { navController.navigate("addItem")},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

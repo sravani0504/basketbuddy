@@ -31,7 +31,7 @@ fun ItemDisplayScreenPreview() {
 @Composable
 fun ItemDisplayScreen(navController: NavController) {
     Scaffold(
-        topBar = { TopBar("Grocery List", onBackClick = {}) },
+        topBar = { TopBar("Grocery List", onBackClick = {navController.popBackStack()}) },
         bottomBar = { BasketBuddyBottomNav() },
         floatingActionButton = {
             FloatingActionButton(

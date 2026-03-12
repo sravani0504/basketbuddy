@@ -132,7 +132,7 @@ fun AddItemScreen(navController: NavController) {
 
             // 4. ADD Button - Visually appealing primary action
             Button(
-                onClick = { /* ViewModel logic will be triggered here later */ },
+                onClick = { navController.navigate("itemDisplay") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

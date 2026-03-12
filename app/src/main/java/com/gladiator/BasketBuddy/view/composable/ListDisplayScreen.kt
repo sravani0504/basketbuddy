@@ -1,57 +1,72 @@
 package com.gladiator.BasketBuddy.view.composable
 
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.gladiator.BasketBuddy.R
+import kotlinx.coroutines.delay
 
-//@Preview(showBackground = true)
+
 @Composable
 fun ListScreen(navController: NavController) {
     val hint = "Search for groups..."
 
-    Column {
-        TopBar("Lists", onBackClick = {})
-        ListDisplayScreen(
-            hint = hint,
-            onSearch = { message ->
-                println("Searching for: $message")
-            }
-        )
-        Spacer(modifier = Modifier.height(500.dp))
-        AddListIcon {  }
-        BasketBuddyBottomNav(navController)
+    Scaffold (
+        topBar={TopBar("Lists", onBackClick = {navController.popBackStack()})},
+        bottomBar={BasketBuddyBottomNav(navController)}
+    ){paddingValues ->
+        Column(Modifier.fillMaxSize().padding(paddingValues)) {
+            ListDisplayScreen(
+                hint = hint,
+                onSearch = { message ->
+                    println("Searching for: $message")
+                }
+            )
+            Spacer(Modifier.weight(1f))
+
+           Row (
+               modifier = Modifier.fillMaxWidth(),
+               horizontalArrangement = Arrangement.End
+           ){
+               IconButton(onClick = {navController.navigate("addList")}) {
+                   Icon(
+                       painter = painterResource(id = R.drawable.outline_playlist_add_24),
+                       contentDescription = "Add List",
+                       modifier = Modifier.size(40.dp)
+                   )
+               }
+           }
+        }
     }
+
 }
 
 @Composable
@@ -77,27 +92,20 @@ fun ListDisplayScreen(
     )
 
     LaunchedEffect(message) {
+        delay(300)
         onSearch(message)
     }
 }
 
-fun HomeClick(){}
-fun GroupClick(){}
-fun ListClick(){}
 
+
+@Preview(showBackground = true)
 @Composable
-fun AddListIcon(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        IconButton(onClick = onClick) {
-            Icon(
-                painter = painterResource(id = R.drawable.outline_playlist_add_24),
-                contentDescription = "Add List",
-                modifier = Modifier.size(42.dp)
-            )
-        }
-    }
+fun PreviewList() {
+    val hint = "rrrrrrr....."
+    var navController = rememberNavController()
+
+        ListScreen(navController)
+
 }
+

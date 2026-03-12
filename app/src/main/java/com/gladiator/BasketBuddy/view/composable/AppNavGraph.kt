@@ -46,8 +46,8 @@ fun AppNavGraph(navController: NavHostController){
             Collaborations(hint = "search", onSearch = {}, navController = navController)
         }
 
-        composable("listDisplay"){
-            ListDisplayScreen(hint = String(), onSearch = {})
+        composable("listScreen"){
+           ListScreen(navController)
         }
 
         composable("itemDisplay"){

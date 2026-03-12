@@ -1,0 +1,129 @@
+Index: app/src/main/java/com/gladiator/BasketBuddy/view/composable/ListDisplayScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.gladiator.BasketBuddy.view.composable\r\n\r\n\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.size\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.Add\r\nimport androidx.compose.material.icons.filled.Search\r\n\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.IconButton\r\nimport androidx.compose.material3.OutlinedTextField\r\nimport androidx.compose.material3.Text\r\n\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.LaunchedEffect\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.navigation.NavController\r\nimport com.gladiator.BasketBuddy.R\r\n\r\n//@Preview(showBackground = true)\r\n@Composable\r\nfun ListScreen(navController: NavController) {\r\n    val hint = \"Search for groups...\"\r\n\r\n    Column {\r\n        TopBar(\"Lists\", onBackClick = {})\r\n        ListDisplayScreen(\r\n            hint = hint,\r\n            onSearch = { message ->\r\n                println(\"Searching for: $message\")\r\n            }\r\n        )\r\n        Spacer(modifier = Modifier.height(500.dp))\r\n        AddListIcon {  }\r\n        BasketBuddyBottomNav(navController)\r\n    }\r\n}\r\n\r\n@Composable\r\nfun ListDisplayScreen(\r\n    hint: String,\r\n    onSearch: (String) -> Unit\r\n) {\r\n    var message by remember { mutableStateOf(\"\") }\r\n\r\n    OutlinedTextField(\r\n        value = message,\r\n        onValueChange = { message = it },\r\n        modifier = Modifier\r\n            .fillMaxWidth()\r\n            .padding(16.dp),\r\n        placeholder = { Text(hint) },\r\n        leadingIcon = {\r\n            Icon(\r\n                imageVector = Icons.Default.Search,\r\n                contentDescription = \"Search\"\r\n            )\r\n        },\r\n    )\r\n\r\n    LaunchedEffect(message) {\r\n        onSearch(message)\r\n    }\r\n}\r\n\r\nfun HomeClick(){}\r\nfun GroupClick(){}\r\nfun ListClick(){}\r\n\r\n@Composable\r\nfun AddListIcon(onClick: () -> Unit) {\r\n    Row(\r\n        modifier = Modifier.fillMaxWidth(),\r\n        horizontalArrangement = Arrangement.End,\r\n        verticalAlignment = Alignment.CenterVertically\r\n    ){\r\n        IconButton(onClick = onClick) {\r\n            Icon(\r\n                painter = painterResource(id = R.drawable.outline_playlist_add_24),\r\n                contentDescription = \"Add List\",\r\n                modifier = Modifier.size(42.dp)\r\n            )\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/gladiator/BasketBuddy/view/composable/ListDisplayScreen.kt b/app/src/main/java/com/gladiator/BasketBuddy/view/composable/ListDisplayScreen.kt
+--- a/app/src/main/java/com/gladiator/BasketBuddy/view/composable/ListDisplayScreen.kt	(revision e91afa4c63c2eccc431979bcab95f683dcbf4fa4)
++++ b/app/src/main/java/com/gladiator/BasketBuddy/view/composable/ListDisplayScreen.kt	(date 1773309769625)
+@@ -26,6 +26,7 @@
+ import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.setValue
++import androidx.compose.ui.AbsoluteAlignment
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.graphics.Color
+@@ -33,23 +34,32 @@
+ import androidx.compose.ui.tooling.preview.Preview
+ import androidx.compose.ui.unit.dp
+ import androidx.navigation.NavController
++import androidx.navigation.compose.rememberNavController
+ import com.gladiator.BasketBuddy.R
++import kotlinx.coroutines.delay
+ 
+ //@Preview(showBackground = true)
+ @Composable
+ fun ListScreen(navController: NavController) {
+     val hint = "Search for groups..."
+ 
+-    Column {
+-        TopBar("Lists", onBackClick = {})
++    Column(Modifier.fillMaxSize()) {
++        TopBar("Lists", onBackClick = {navController.popBackStack()})
+         ListDisplayScreen(
+             hint = hint,
+             onSearch = { message ->
+                 println("Searching for: $message")
+             }
+         )
+-        Spacer(modifier = Modifier.height(500.dp))
+-        AddListIcon {  }
++        Spacer(Modifier.weight(1f))
++//        AddListIcon {  }
++        IconButton(onClick = {navController.navigate("addList")}) {
++            Icon(
++                painter = painterResource(id = R.drawable.outline_playlist_add_24),
++                contentDescription = "Add List",
++                modifier = Modifier.size(42.dp).align(Alignment.End).padding(46.dp)
++            )
++        }
+         BasketBuddyBottomNav(navController)
+     }
+ }
+@@ -77,6 +87,7 @@
+     )
+ 
+     LaunchedEffect(message) {
++        delay(300)
+         onSearch(message)
+     }
+ }
+@@ -85,19 +96,30 @@
+ fun GroupClick(){}
+ fun ListClick(){}
+ 
++//@Composable
++//fun AddListIcon(onClick: () -> Unit) {
++//    Row(
++//        modifier = Modifier.fillMaxWidth(),
++//        horizontalArrangement = Arrangement.End,
++//        verticalAlignment = Alignment.CenterVertically
++//    ){
++//        IconButton(onClick = onClick) {
++//            Icon(
++//                painter = painterResource(id = R.drawable.outline_playlist_add_24),
++//                contentDescription = "Add List",
++//                modifier = Modifier.size(42.dp)
++//            )
++//        }
++//    }
++//}
++
++@Preview(showBackground = true)
+ @Composable
+-fun AddListIcon(onClick: () -> Unit) {
+-    Row(
+-        modifier = Modifier.fillMaxWidth(),
+-        horizontalArrangement = Arrangement.End,
+-        verticalAlignment = Alignment.CenterVertically
+-    ){
+-        IconButton(onClick = onClick) {
+-            Icon(
+-                painter = painterResource(id = R.drawable.outline_playlist_add_24),
+-                contentDescription = "Add List",
+-                modifier = Modifier.size(42.dp)
+-            )
+-        }
+-    }
++fun PreviewList() {
++    val hint = "rrrrrrr....."
++    var navController = rememberNavController()
++
++        ListScreen(navController)
++
+ }
++
+Index: app/src/main/java/com/gladiator/BasketBuddy/view/composable/AppNavGraph.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.gladiator.BasketBuddy.view.composable\r\n\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.lifecycle.viewmodel.compose.viewModel\r\nimport androidx.navigation.NavHostController\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\n\r\n@Composable\r\nfun AppNavGraph(navController: NavHostController){\r\n\r\n    NavHost(\r\n        navController=navController,\r\n        startDestination = \"splash\"\r\n    ) {\r\n        composable(\"splash\"){\r\n            SplashScreen(onNavigate = {navController.navigate(\"signup\"){\r\n                popUpTo(\"splash\"){\r\n                    inclusive=true\r\n                }\r\n                launchSingleTop=true\r\n            } })\r\n        }\r\n        composable(\"signup\"){\r\n            SignUpScreen(navController,viewModel(), onSignUpSuccess = {\r\n                navController.navigate(\"login\"){\r\n                    popUpTo(\"signup\"){\r\n                        inclusive=true\r\n                    }\r\n                    launchSingleTop=true\r\n                }\r\n            })\r\n        }\r\n\r\n        composable(\"login\"){\r\n            LoginScreen(navController,viewModel(), onLoginSuccess = {\r\n                navController.navigate(\"home\"){\r\n            } })\r\n        }\r\n\r\n        composable(\"home\"){\r\n            HomeScreen(navController)\r\n        }\r\n\r\n        composable(\"collaboration\"){\r\n            Collaborations(hint = \"search\", onSearch = {}, navController = navController)\r\n        }\r\n\r\n        composable(\"listDisplay\"){\r\n            ListDisplayScreen(hint = String(), onSearch = {})\r\n        }\r\n\r\n        composable(\"itemDisplay\"){\r\n            ItemDisplayScreen(navController)\r\n        }\r\n\r\n        composable(\"addList\"){\r\n            AddListScreen(navController)\r\n        }\r\n\r\n        composable(\"addItem\"){\r\n            AddItemScreen(navController)\r\n        }\r\n        composable(\"summaryScreen\"){\r\n            PreviewSummary()\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/gladiator/BasketBuddy/view/composable/AppNavGraph.kt b/app/src/main/java/com/gladiator/BasketBuddy/view/composable/AppNavGraph.kt
+--- a/app/src/main/java/com/gladiator/BasketBuddy/view/composable/AppNavGraph.kt	(revision e91afa4c63c2eccc431979bcab95f683dcbf4fa4)
++++ b/app/src/main/java/com/gladiator/BasketBuddy/view/composable/AppNavGraph.kt	(date 1773309056189)
+@@ -46,8 +46,8 @@
+             Collaborations(hint = "search", onSearch = {}, navController = navController)
+         }
+ 
+-        composable("listDisplay"){
+-            ListDisplayScreen(hint = String(), onSearch = {})
++        composable("listScreen"){
++           ListScreen(navController)
+         }
+ 
+         composable("itemDisplay"){

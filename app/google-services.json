@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "818239688141",
+    "project_id": "basketbuddies-487e7",
+    "storage_bucket": "basketbuddies-487e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818239688141:android:d5d70023fbaf97bcfbc884",
+        "android_client_info": {
+          "package_name": "com.gladiator.BasketBuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4XGpnfzK8eMBkZQnahdGC6ZtQlkhBHhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

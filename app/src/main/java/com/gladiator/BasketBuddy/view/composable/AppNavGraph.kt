@@ -61,5 +61,8 @@ fun AppNavGraph(navController: NavHostController){
         composable("addItem"){
             AddItemScreen(navController)
         }
+        composable("summaryScreen"){
+            PreviewSummary()
+        }
     }
 }

@@ -52,7 +52,9 @@ fun BasketBuddyBottomNav(navController: NavController) {
             selected = selectedIndex == 1,
             onClick = {
                 selectedIndex = 1
-                navController.navigate("collaboration")
+                navController.navigate("collaboration"){
+                    popUpTo("collaboration"){ inclusive = true}
+                }
             },
             icon = { Icon(Icons.Filled.Groups, contentDescription = "Group", modifier = Modifier.size(26.dp))
                    },

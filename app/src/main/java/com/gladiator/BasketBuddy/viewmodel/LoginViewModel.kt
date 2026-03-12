@@ -51,14 +51,12 @@ class LoginViewModel: ViewModel() {
         }
 
         if (usernameErr!=null || passwordErr!=null) return
-        if (current.isLoading) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 delay(1000)
             }catch (e: Throwable){
-                _uiState.update { it.copy(isLoading = false, error = "Something went wrong") }
+                _uiState.update { it.copy( error = "Something went wrong") }
             }
         }
 

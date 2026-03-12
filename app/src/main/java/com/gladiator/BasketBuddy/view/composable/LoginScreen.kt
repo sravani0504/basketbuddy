@@ -119,18 +119,12 @@ fun LoginScreen(navController: NavController,viewModel: LoginViewModel,onLoginSu
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                enabled = uiState.isFormValid && !uiState.isLoading,
+                enabled = uiState.isFormValid,
                 onClick = {
                     viewModel.onAction(LoginAction.Submit(onSuccess = onLoginSuccess))
+                    navController.navigate("home")
                 },modifier= Modifier.fillMaxWidth().padding(10.dp)
             ) {
-                if (uiState.isLoading){
-                    CircularProgressIndicator(
-                        modifier= Modifier.size(20.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
                 Text("Login")
             }
         }

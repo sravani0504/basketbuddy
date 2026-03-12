@@ -33,7 +33,9 @@ fun AppNavGraph(navController: NavHostController){
         }
 
         composable("login"){
-            LoginScreen(navController,viewModel())
+            LoginScreen(navController,viewModel(), onLoginSuccess = {
+                navController.navigate("home"){
+            } })
         }
 
         composable("home"){
@@ -45,11 +47,11 @@ fun AppNavGraph(navController: NavHostController){
         }
 
         composable("listDisplay"){
-            ListDisplayScreen(hint = String()) { }
+            ListDisplayScreen(hint = String(), onSearch = {})
         }
 
         composable("itemDisplay"){
-            ItemDisplayScreen()
+            ItemDisplayScreen(navController)
         }
 
         composable("addList"){

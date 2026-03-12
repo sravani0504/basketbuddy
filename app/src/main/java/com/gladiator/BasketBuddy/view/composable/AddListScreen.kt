@@ -20,7 +20,7 @@ fun AddListScreen(navController: NavController) {
 
     Scaffold(
         topBar = { TopBar("Add List", onBackClick = {}) },
-        bottomBar = { BasketBuddyBottomNav() },
+        bottomBar = { BasketBuddyBottomNav(navController) },
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(

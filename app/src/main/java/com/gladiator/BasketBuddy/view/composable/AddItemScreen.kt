@@ -52,7 +52,7 @@ fun AddItemScreen(navController: NavController) {
 
     Scaffold(
         topBar = { TopBar("Add Item", onBackClick = {}) },      // Reusing your TopBar.kt
-        bottomBar = { BasketBuddyBottomNav() } // Reusing your BottomNavBar.kt
+        bottomBar = { BasketBuddyBottomNav(navController) } // Reusing your BottomNavBar.kt
     ) { paddingValues ->
         Column(
             modifier = Modifier

@@ -19,11 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun BasketBuddyBottomNav(
-
+fun BasketBuddyBottomNav(navController: NavController
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
 

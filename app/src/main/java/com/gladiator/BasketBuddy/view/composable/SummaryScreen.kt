@@ -62,6 +62,6 @@ fun PreviewSummary(){
     Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween){
         TopBar(title = "Items Summary", onBackClick = {})
         ItemSummaryScreen(items)
-        BasketBuddyBottomNav()
+        //BasketBuddyBottomNav()
     }
 }

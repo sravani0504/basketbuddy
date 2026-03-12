@@ -1,5 +1,6 @@
 package com.gladiator.BasketBuddy.view.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.filled.Search
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,10 +43,16 @@ fun ListScreen(navController: NavController) {
     val hint = "Search for groups..."
 
     Scaffold (
-        topBar={TopBar("Lists", onBackClick = {navController.popBackStack()})},
+        topBar={
+            TopBar(
+                "Lists",
+                onBackClick = {navController.popBackStack()})},
         bottomBar={BasketBuddyBottomNav(navController)}
     ){paddingValues ->
-        Column(Modifier.fillMaxSize().padding(paddingValues)) {
+        Column(Modifier.fillMaxSize()
+            .background(Color(0xFFF5EBDD))
+            .padding(paddingValues))
+        {
             ListDisplayScreen(
                 hint = hint,
                 onSearch = { message ->
@@ -53,20 +62,21 @@ fun ListScreen(navController: NavController) {
             Spacer(Modifier.weight(1f))
 
            Row (
-               modifier = Modifier.fillMaxWidth(),
+               modifier = Modifier.fillMaxWidth()
+                   .padding(16.dp),
                horizontalArrangement = Arrangement.End
            ){
                IconButton(onClick = {navController.navigate("addList")}) {
                    Icon(
                        painter = painterResource(id = R.drawable.outline_playlist_add_24),
                        contentDescription = "Add List",
-                       modifier = Modifier.size(40.dp)
+                       modifier = Modifier.size(50.dp),
+                       tint = Color(0xFFB08968)
                    )
                }
            }
         }
     }
-
 }
 
 @Composable
@@ -86,9 +96,11 @@ fun ListDisplayScreen(
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search"
+                contentDescription = "Search",
+                tint = Color(0xFFB08968)
             )
         },
+        shape = RoundedCornerShape(14.dp)
     )
 
     LaunchedEffect(message) {
@@ -99,13 +111,13 @@ fun ListDisplayScreen(
 
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewList() {
-//    val hint = "rrrrrrr....."
-//    var navController = rememberNavController()
-//
-//        ListScreen(navController)
-//
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewList() {
+    val hint = "rrrrrrr....."
+    var navController = rememberNavController()
+
+        ListScreen(navController)
+
+}
 

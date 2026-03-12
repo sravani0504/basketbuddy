@@ -1,5 +1,6 @@
 package com.gladiator.BasketBuddy.view.composable
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -202,8 +204,25 @@ fun HomeScreen(navController: NavController) {
                                 style = MaterialTheme.typography.bodyLarge
                             )
 
+                            val context = LocalContext.current
 
-                            IconButton(onClick = { /* share code */ }) {
+                            IconButton(onClick = {
+                                if (generatedCode.isNotEmpty()){
+                                    val sendIntent= Intent(Intent.ACTION_SEND).apply {
+                                        type="text/plain"
+                                        putExtra(Intent.EXTRA_SUBJECT,"BasketBuddy Group Code")
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "Join my BasketBuddy group with this code: $generatedCode"
+                                        )
+                                    }
+                                    val chooser=Intent.createChooser(sendIntent,"share code via")
+
+                                    if (sendIntent.resolveActivity(context.packageManager)!=null){
+                                        context.startActivity(chooser)
+                                    }
+                                }
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Share,
                                     contentDescription = "Share"

@@ -63,7 +63,7 @@ fun HomeScreen(navController: NavController){
 
     Scaffold(
         topBar = {TopBar("Home")},
-        bottomBar = {BasketBuddyBottomNav() }
+        bottomBar = {BasketBuddyBottomNav(navController) }
     ) {paddingValues ->
         Column(
             modifier = Modifier.fillMaxSize()
@@ -100,7 +100,9 @@ fun HomeScreen(navController: NavController){
             Spacer(Modifier.height(12.dp))
 
             Button (
-                onClick = { /* join group logic */ },
+                onClick = { navController.navigate("collaboration") {
+                    launchSingleTop=true
+                } },
                 modifier = Modifier.fillMaxWidth()
             ){
                 Text("Join Group")
@@ -164,7 +166,9 @@ fun HomeScreen(navController: NavController){
 
 
             Button(
-                onClick = { /* create group */ },
+                onClick = { navController.navigate("collaboration"){
+                    launchSingleTop=true
+                } },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Create Group")

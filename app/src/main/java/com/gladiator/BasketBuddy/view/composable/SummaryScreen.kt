@@ -1,5 +1,6 @@
 package com.gladiator.BasketBuddy.view.composable
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,7 @@ fun ItemSummaryRow(
     }
 }
 
+
 @Composable
 fun ItemSummaryList(items: List<Item>, modifier: Modifier = Modifier){
     LazyColumn(modifier = modifier.padding(top = 10.dp)) {
@@ -44,6 +46,7 @@ fun ItemSummaryList(items: List<Item>, modifier: Modifier = Modifier){
         }
     }
 }
+
 
 @Composable
 fun ItemSummaryScreen(items: List<Item>, modifier: Modifier = Modifier){

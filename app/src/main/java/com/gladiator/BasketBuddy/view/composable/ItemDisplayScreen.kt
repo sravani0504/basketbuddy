@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.gladiator.BasketBuddy.model.Item
 
 @Composable
@@ -99,9 +100,9 @@ fun ItemList(items: List<Item>) {
 
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun ItemDisplayScreen(){
+fun ItemDisplayScreen(navController: NavController){
     val sampleItems=listOf(Item("Milk", "1 litre packet"),
         Item("Bread","Whole Wheat bread"))
     Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween){
@@ -110,6 +111,6 @@ fun ItemDisplayScreen(){
         Button(onClick = {}, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("Save")
         }
-        BasketBuddyBottomNav()
+        BasketBuddyBottomNav(navController)
     }
 }

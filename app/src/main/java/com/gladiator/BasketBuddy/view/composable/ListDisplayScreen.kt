@@ -50,7 +50,7 @@ fun ListScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(500.dp))
         AddListIcon {  }
-        BasketBuddyBottomNav()
+        BasketBuddyBottomNav(navController)
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.gladiator.BasketBuddy.model.Group
 
 @Composable
 fun AppNavGraph(navController: NavHostController){

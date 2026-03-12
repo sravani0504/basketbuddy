@@ -19,15 +19,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Preview(showBackground = true)
 @Composable
 fun ItemDisplayScreenPreview() {
-    ItemDisplayScreen()
+    ItemDisplayScreen(navController = rememberNavController())
 }
 
 @Composable
-fun ItemDisplayScreen() {
+fun ItemDisplayScreen(navController: NavController) {
     Scaffold(
         topBar = { TopBar("Grocery List", onBackClick = {}) },
         bottomBar = { BasketBuddyBottomNav() },

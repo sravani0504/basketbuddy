@@ -16,6 +16,7 @@ import com.gladiator.BasketBuddy.ui.theme.BasketBuddyTheme
 import com.gladiator.BasketBuddy.view.composable.AddItemScreen
 import com.gladiator.BasketBuddy.view.composable.HomeScreen
 import com.gladiator.BasketBuddy.view.composable.LoginScreen
+import com.gladiator.BasketBuddy.view.composable.SplashScreen
 import com.gladiator.BasketBuddy.viewmodel.LoginAction
 
 class MainActivity : ComponentActivity() {

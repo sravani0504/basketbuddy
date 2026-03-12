@@ -30,14 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
-
-
-
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavController){
 
 
     var joinCode by remember { mutableStateOf("") }

@@ -1,0 +1,56 @@
+package com.gladiator.BasketBuddy.view.composable
+
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+
+@Composable
+fun AppNavGraph(navController: NavHostController){
+
+    NavHost(
+        navController=navController,
+        startDestination = "splash"
+    ) {
+        composable("splash"){
+            SplashScreen(onNavigate = {navController.navigate("signup"){
+                popUpTo("splash"){
+                    inclusive=true
+                }
+            } })
+        }
+        composable("signup"){
+            SignUpScreen(navController,viewModel())
+        }
+
+        composable("login"){
+            LoginScreen(navController,viewModel())
+        }
+
+        composable("home"){
+            HomeScreen(navController)
+        }
+
+        composable("collaboration"){
+            Collaborations(hint = "search", onSearch = {}, navController = navController)
+        }
+
+        composable("listDisplay"){
+            ListDisplayScreen(hint = String()) { }
+        }
+
+        composable("itemDisplay"){
+            ItemDisplayScreen(navController)
+        }
+
+        composable("addList"){
+            AddListScreen(navController)
+        }
+
+        composable("addItem"){
+            AddItemScreen(navController)
+        }
+    }
+}

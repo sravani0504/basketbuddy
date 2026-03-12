@@ -28,30 +28,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    val hint = "Search for groups..."
-
-    Column {
-        TopBar("Collaborations", onBackClick = {})
-        Collaborations(
-            hint = hint,
-            onSearch = { query ->
-                println("Searching for: $query")
-            }
-        )
-        Spacer(modifier = Modifier.height(500.dp))
-        BasketBuddyBottomNav()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview() {
+//    val hint = "Search for groups..."
+//
+//    Column {
+//        TopBar("Collaborations", onBackClick = {})
+//        Collaborations(
+//            hint = hint,
+//            onSearch = { query ->
+//                println("Searching for: $query")
+//            }
+//        )
+//        Spacer(modifier = Modifier.height(500.dp))
+//        BasketBuddyBottomNav()
+//    }
+//}
 
 @Composable
 fun Collaborations(
     hint: String,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    navController: NavController
 ) {
     var query by remember { mutableStateOf("") }
 

@@ -35,10 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun AddItemScreen() {
+fun AddItemScreen(navController: NavController) {
     // These are temporary UI-only states for local interactions
     // They will be replaced by viewModel.uiState later
     var itemName by remember { mutableStateOf("") }

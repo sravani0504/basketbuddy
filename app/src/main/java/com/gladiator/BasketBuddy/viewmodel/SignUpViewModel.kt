@@ -22,27 +22,22 @@ class SignUpViewModel : ViewModel() {
     val uiState: StateFlow<SignUpUiState> = _uiState
 
     fun onAction(action: SignUpAction) {
-
         when (action) {
-
             is SignUpAction.EmailChanged -> {
                 _uiState.update {
                     it.copy(email = action.value)
                 }
             }
-
             is SignUpAction.UsernameChanged -> {
                 _uiState.update {
                     it.copy(username = action.value)
                 }
             }
-
             is SignUpAction.PasswordChanged -> {
                 _uiState.update {
                     it.copy(password = action.value)
                 }
             }
-
             is SignUpAction.Submit -> {
 
                 val state = _uiState.value

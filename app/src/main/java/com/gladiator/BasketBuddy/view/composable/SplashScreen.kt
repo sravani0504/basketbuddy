@@ -1,7 +1,10 @@
 package com.gladiator.BasketBuddy.view.composable
 
-
-
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,28 +16,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gladiator.BasketBuddy.ui.theme.BasketBuddyTheme
 import kotlinx.coroutines.delay
+import androidx.compose.foundation.layout.offset
 import com.gladiator.BasketBuddy.R
 
 @Composable
@@ -45,6 +45,17 @@ fun SplashScreen(onNavigate: () -> Unit) {
         onNavigate()
     }
 
+    val infiniteTransition = rememberInfiniteTransition(label = "")
+    //Basket bounce animation
+    val basketOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = -15f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(700),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = ""
+    )
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -62,48 +73,13 @@ fun SplashScreen(onNavigate: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-
-                // Motion lines behind basket
-                Canvas(
-                    modifier = Modifier.size(180.dp)
-                ) {
-
-                    drawLine(
-                        color = Color(0xFFF3E6D2),
-                        start = Offset(0.5f, size.height * 0.40f),
-                        end = Offset(size.width * 0.35f, size.height * 0.35f),
-                        strokeWidth = 14f,
-                        cap = StrokeCap.Round
-                    )
-
-                    drawLine(
-                        color = Color(0xFFF3E6D2),
-                        start = Offset(10f, size.height * 0.55f),
-                        end = Offset(size.width * 0.35f, size.height * 0.50f),
-                        strokeWidth = 14f,
-                        cap = StrokeCap.Round
-                    )
-
-                    drawLine(
-                        color = Color(0xFFF3E6D2),
-                        start = Offset(10f, size.height * 0.70f),
-                        end = Offset(size.width * 0.35f, size.height * 0.65f),
-                        strokeWidth = 14f,
-                        cap = StrokeCap.Round
-                    )
-                }
-
-                // Basket image
-                Image(
-                    painter = painterResource(id = R.drawable.basket2),
-                    contentDescription = "Basket",
-                    modifier = Modifier.size(180.dp)
-                )
-            }
+            // Basket image
+            Image(
+                painter = painterResource(id = R.drawable.basket2),
+                contentDescription = "Basket",
+                modifier = Modifier.size(180.dp)
+                    .offset(y = basketOffset.dp)
+            )
 
             Spacer(modifier = Modifier.height(18.dp))
 
@@ -143,9 +119,6 @@ fun SplashScreen(onNavigate: () -> Unit) {
         }
     }
 }
-
-
-
 
 @Preview(showBackground = true)
 @Composable

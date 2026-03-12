@@ -252,9 +252,9 @@ fun SignUpScreen(
 @Composable
 fun SignUpScreenPreview() {
 
-//        SignUpScreen(
-//            viewModel  = SignUpViewModel(),
-//            onSignUpSuccess = { }
-//      )
+        SignUpScreen(
+            viewModel  = SignUpViewModel(),
+            onSignUpSuccess = { }
+      )
 
 }

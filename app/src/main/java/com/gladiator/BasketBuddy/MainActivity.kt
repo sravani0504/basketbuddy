@@ -18,6 +18,7 @@ import com.gladiator.BasketBuddy.view.composable.AddItemScreen
 import com.gladiator.BasketBuddy.view.composable.AppNavGraph
 import com.gladiator.BasketBuddy.view.composable.Collaborations
 import com.gladiator.BasketBuddy.view.composable.HomeScreen
+import com.gladiator.BasketBuddy.view.composable.ItemDisplayScreen
 import com.gladiator.BasketBuddy.view.composable.LoginScreen
 import com.gladiator.BasketBuddy.view.composable.SplashScreen
 import com.gladiator.BasketBuddy.viewmodel.LoginAction
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
 //                        modifier = Modifier.padding(innerPadding)
 //                    )
                     AppNavGraph(navController = rememberNavController())
+
                 }
             }
         }

@@ -71,7 +71,6 @@ fun HomeScreen(navController: NavController){
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
-
             Text(
                 text = "Groups",
                 style = MaterialTheme.typography.headlineMedium,
@@ -109,7 +108,6 @@ fun HomeScreen(navController: NavController){
             }
 
             Spacer(Modifier.height(32.dp))
-
 
             Text(
                 text = "CREATE GROUP",

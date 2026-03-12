@@ -1,5 +1,6 @@
 package com.gladiator.BasketBuddy.view.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -8,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,7 @@ fun AddItemScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color(0xFFF5EBDD))
                 .padding(paddingValues)
                 .padding(24.dp),
             verticalArrangement = Arrangement.Top,
@@ -40,6 +43,7 @@ fun AddItemScreen(navController: NavController) {
                 text = "Enter Item Details",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
+                color = Color(0xFF5A3E2B),
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(bottom = 24.dp)
@@ -52,7 +56,7 @@ fun AddItemScreen(navController: NavController) {
                 label = { Text("Item Name") },
                 placeholder = { Text("e.g. Milk") },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(14.dp),
                 singleLine = true
             )
 
@@ -65,10 +69,10 @@ fun AddItemScreen(navController: NavController) {
                 label = { Text("Description") },
                 placeholder = { Text("e.g. 1 litre packet") },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(14.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             // 3. Quantity Selector (Matching your Data Class)
             Row(
@@ -88,12 +92,10 @@ fun AddItemScreen(navController: NavController) {
                     label = { Text("Quantity") },
                     placeholder = { Text("1") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(14.dp),
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.weight(1f))
-
-
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -109,12 +111,13 @@ fun AddItemScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(Color(0xFFB08968)),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = null)
+                Icon(Icons.Default.Add, contentDescription = null, tint = Color.White)
                 Spacer(Modifier.width(8.dp))
-                Text("ADD ITEM", style = MaterialTheme.typography.titleMedium)
+                Text("ADD ITEM", style = MaterialTheme.typography.titleMedium, color = Color.White)
             }
         }
     }

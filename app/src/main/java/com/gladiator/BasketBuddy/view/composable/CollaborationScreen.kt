@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
@@ -31,11 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-//@Preview(showBackground = true)
-//@Composable
-//fun Preview() {
-//    val hint = "Search for groups..."
-//
+@Preview(showBackground = true)
+@Composable
+fun Preview() {
+    val hint = "Search for groups..."
+
+    Collaborations(hint = "search", onSearch = {}, navController = rememberNavController())
 //    Column {
 //        TopBar("Collaborations", onBackClick = {})
 //        Collaborations(
@@ -47,7 +49,7 @@ import androidx.navigation.compose.rememberNavController
 //        Spacer(modifier = Modifier.height(500.dp))
 //        BasketBuddyBottomNav()
 //    }
-//}
+}
 
 @Composable
 fun Collaborations(
@@ -55,26 +57,37 @@ fun Collaborations(
     onSearch: (String) -> Unit,
     navController: NavController
 ) {
-    var query by remember { mutableStateOf("") }
 
-    OutlinedTextField(
-        value = query,
-        onValueChange = { query = it },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        placeholder = { Text(hint) },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search"
+    Scaffold (
+        topBar={TopBar("Collaborations", onBackClick = {})},
+        bottomBar = {BasketBuddyBottomNav(navController)}
+    ){paddingValues ->
+        Column {
+            var query by remember { mutableStateOf("") }
+
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                placeholder = { Text(hint) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search"
+                    )
+                },
             )
-        },
-    )
 
-    LaunchedEffect(query) {
-        onSearch(query)
+            LaunchedEffect(query) {
+                onSearch(query)
+            }
+        }
     }
+
+
 }
 
 fun onHomeClick(){}

@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gladiator.BasketBuddy.ui.theme.BasketBuddyTheme
 import com.gladiator.BasketBuddy.view.composable.AddItemScreen
 import com.gladiator.BasketBuddy.view.composable.AppNavGraph
+import com.gladiator.BasketBuddy.view.composable.Collaborations
 import com.gladiator.BasketBuddy.view.composable.HomeScreen
 import com.gladiator.BasketBuddy.view.composable.LoginScreen
 import com.gladiator.BasketBuddy.view.composable.SplashScreen

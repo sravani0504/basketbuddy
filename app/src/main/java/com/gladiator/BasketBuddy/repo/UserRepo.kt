@@ -6,6 +6,11 @@ import com.google.firebase.database.FirebaseDatabase
 class ItemRepo {
 
     fun addItem(item: Item){
-        FirebaseDatabase.
+        var dbRef = FirebaseDatabase.getInstance().getReference("Items")
+        dbRef.child("Id").setValue(item)
     }
+
+
+
+
 }

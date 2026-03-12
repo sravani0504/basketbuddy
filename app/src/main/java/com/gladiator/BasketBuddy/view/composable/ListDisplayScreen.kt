@@ -99,13 +99,13 @@ fun ListDisplayScreen(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewList() {
-    val hint = "rrrrrrr....."
-    var navController = rememberNavController()
-
-        ListScreen(navController)
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewList() {
+//    val hint = "rrrrrrr....."
+//    var navController = rememberNavController()
+//
+//        ListScreen(navController)
+//
+//}
 

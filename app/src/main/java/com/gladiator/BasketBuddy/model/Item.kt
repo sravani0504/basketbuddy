@@ -1,9 +1,14 @@
 package com.gladiator.BasketBuddy.model
 
+import com.google.firebase.database.IgnoreExtraProperties
 
+@IgnoreExtraProperties
 data class Item(
-    val itemName:String="",
-    val itemDescription: String,
-    val quantity: Int=0,
-    val listId:Int=0) {
+    var itemId: String = "",
+    var itemName: String = "",
+    var itemDescription: String = "",
+    var quantity: Int = 0,
+    var listId: Int = 0
+) {
+    constructor() : this("", "", "", 0, 0)
 }

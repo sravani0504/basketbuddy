@@ -21,26 +21,28 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gladiator.BasketBuddy.model.Item
+import com.gladiator.BasketBuddy.model.Screen
 import com.gladiator.BasketBuddy.viewmodel.ItemDisplayViewModel
 
 @Composable
@@ -166,7 +168,7 @@ fun ItemList(
 @Preview(showBackground = true)
 @Composable
 fun itemdisplayPreview(){
-    var navController = rememberNavController()
+    val navController = rememberNavController()
     ItemDisplayScreen(navController)
 }
 
@@ -175,45 +177,67 @@ fun ItemDisplayScreen(
     navController: NavController,
     viewModel: ItemDisplayViewModel = viewModel()
 ) {
-    val items by viewModel.items.collectAsState()
+    val items by viewModel.items.collectAsStateWithLifecycle()
+    val selectedListName by viewModel.selectedListName.collectAsStateWithLifecycle()
+    val message by viewModel.message.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    // TEMP: simulate receiving from another screen
     LaunchedEffect(Unit) {
-        viewModel.setItems(
-            listOf(
-                Item("Milk", "1 litre packet"),
-                Item("Bread", "Whole Wheat bread")
-            )
-        )
+        viewModel.loadItemsForSelectedList()
     }
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.loadItemsForSelectedList()
+            }
+        }
 
-    val bottomBarHeight = 64.dp
-    val fabBottomPadding = bottomBarHeight + 16.dp
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()
         .background(Color(0xFFF5EBDD))
     ) {
-        TopBar(title = "Groceries", onBackClick = { navController.popBackStack() })
+        TopBar(title = selectedListName.ifBlank { "Items" }, onBackClick = { navController.popBackStack() })
 
         Box(modifier = Modifier.weight(1f)) {
             Column {
+                message?.let {
+                    Text(
+                        text = it,
+                        color = if (it == "Changes saved") Color(0xFF2E7D32) else MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
+
                 ItemList(
                     items = items,
                     onIncrement = viewModel::incrementQuantity,
                     onDecrement = viewModel::decrementQuantity
                 )
+
+                if (items.isEmpty()) {
+                    Text(
+                        text = "No items added yet",
+                        color = Color.Gray,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                    )
+                }
+
                 Button(
                     onClick = {
-                        // items here contain updated quantities
-                        navController.navigate("summaryscreen")
+                        viewModel.saveChanges { }
                     },
                     modifier = Modifier
                         .padding(16.dp).align(Alignment.CenterHorizontally),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB08968)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Save",
+                    Text("Save Changes",
                         fontSize = 16.sp,
                         color = Color.White
                     )
@@ -222,7 +246,7 @@ fun ItemDisplayScreen(
 
             FloatingActionButton(
                 onClick = {
-                    navController.navigate("addItem")
+                    navController.navigate(Screen.AddItem.route)
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

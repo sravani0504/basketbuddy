@@ -13,14 +13,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.gladiator.BasketBuddy.model.Screen
+import com.gladiator.BasketBuddy.viewmodel.AddListViewModel
 
 //@Preview(showBackground = true)
 @Composable
-fun AddListScreen(navController: NavController) {
+fun AddListScreen(
+    navController: NavController,
+    viewModel: AddListViewModel = viewModel()
+) {
 
-    var listName by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = { TopBar("Add List", onBackClick = {navController.popBackStack()}) },
@@ -43,20 +50,49 @@ fun AddListScreen(navController: NavController) {
                 modifier = Modifier.align(Alignment.Start)
             )
 
+            if (uiState.selectedGroupName.isNotBlank()) {
+                Text(
+                    text = "Group: ${uiState.selectedGroupName}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFF7A5C45),
+                    modifier = Modifier.align(Alignment.Start)
+                )
+            }
+
             OutlinedTextField(
-                value = listName,
-                onValueChange = { listName = it },
+                value = uiState.listName,
+                onValueChange = viewModel::onListNameChanged,
                 label = { Text("List Name") },
                 placeholder = { Text("e.g. Weekly Grocery") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                singleLine = true
+                singleLine = true,
+                isError = uiState.listNameError != null,
+                supportingText = {
+                    uiState.listNameError?.let {
+                        Text(it)
+                    }
+                }
             )
+
+            uiState.message?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = { navController.navigate("addItem")},
+                onClick = {
+                    viewModel.createList {
+                        navController.navigate(Screen.ItemDisplay.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

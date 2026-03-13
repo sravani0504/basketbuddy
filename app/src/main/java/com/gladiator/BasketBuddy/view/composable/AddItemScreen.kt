@@ -14,17 +14,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.gladiator.BasketBuddy.model.Item
+import com.gladiator.BasketBuddy.viewmodel.AddItemViewModel
 
 @Composable
-fun AddItemScreen(navController: NavController) {
-    var itemName by remember { mutableStateOf("") }
-    var itemDescription by remember { mutableStateOf("") }
-
-    // Matches the 'quantity' field in your Item data class
-    var quantityText by remember { mutableStateOf("") }
+fun AddItemScreen(
+    navController: NavController,
+    viewModel: AddItemViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = { TopBar("Add Item", onBackClick = { navController.popBackStack() }) },
@@ -49,23 +50,38 @@ fun AddItemScreen(navController: NavController) {
                     .padding(bottom = 24.dp)
             )
 
-            // 1. Item Name
+            if (uiState.selectedListName.isNotBlank()) {
+                Text(
+                    text = "List: ${uiState.selectedListName}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFF7A5C45),
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 12.dp)
+                )
+            }
+
             OutlinedTextField(
-                value = itemName,
-                onValueChange = { itemName = it },
+                value = uiState.itemName,
+                onValueChange = viewModel::onItemNameChanged,
                 label = { Text("Item Name") },
                 placeholder = { Text("e.g. Milk") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                singleLine = true
+                singleLine = true,
+                isError = uiState.itemNameError != null,
+                supportingText = {
+                    uiState.itemNameError?.let {
+                        Text(it)
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 2. Item Description
             OutlinedTextField(
-                value = itemDescription,
-                onValueChange = { itemDescription = it },
+                value = uiState.itemDescription,
+                onValueChange = viewModel::onItemDescriptionChanged,
                 label = { Text("Description") },
                 placeholder = { Text("e.g. 1 litre packet") },
                 modifier = Modifier.fillMaxWidth(),
@@ -74,7 +90,6 @@ fun AddItemScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // 3. Quantity Selector (Matching your Data Class)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -82,31 +97,39 @@ fun AddItemScreen(navController: NavController) {
             ) {
 
                 OutlinedTextField(
-                    value = quantityText,
-                    onValueChange = { input ->
-                        // Only allow numeric input
-                        if (input.all { it.isDigit() }) {
-                            quantityText = input
-                        }
-                    },
+                    value = uiState.quantityText,
+                    onValueChange = viewModel::onQuantityChanged,
                     label = { Text("Quantity") },
                     placeholder = { Text("1") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    singleLine = true
+                    singleLine = true,
+                    isError = uiState.quantityError != null,
+                    supportingText = {
+                        uiState.quantityError?.let {
+                            Text(it)
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.weight(1f))
             }
 
+            uiState.message?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
-            // 4. ADD Button
             Button(
                 onClick = {
-                    // This matches your Item(itemName, itemDescription, quantity)
-                    val newItem = Item(itemName, itemDescription, quantityText.toInt())
-
-                    navController.navigate("itemDisplay")
+                    viewModel.saveItem {
+                        navController.popBackStack()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

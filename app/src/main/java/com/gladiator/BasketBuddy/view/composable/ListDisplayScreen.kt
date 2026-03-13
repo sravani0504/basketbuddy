@@ -1,6 +1,7 @@
 package com.gladiator.BasketBuddy.view.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gladiator.BasketBuddy.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gladiator.BasketBuddy.model.ItemList
+import com.gladiator.BasketBuddy.model.Screen
 import com.gladiator.BasketBuddy.viewmodel.BasketViewModel
 
 
@@ -95,7 +97,15 @@ fun ListScreen(
                 )
             }
 
-            ListsContent(lists = lists)
+            ListsContent(
+                lists = lists,
+                onListClick = { itemList ->
+                    viewModel.onListSelected(itemList)
+                    navController.navigate(Screen.ItemDisplay.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
 
             Spacer(Modifier.weight(1f))
 
@@ -118,7 +128,10 @@ fun ListScreen(
 }
 
 @Composable
-private fun ListsContent(lists: List<ItemList>) {
+private fun ListsContent(
+    lists: List<ItemList>,
+    onListClick: (ItemList) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,6 +144,7 @@ private fun ListsContent(lists: List<ItemList>) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 6.dp)
+                    .clickable { onListClick(itemList) }
             ) {
                 Text(
                     text = itemList.name,

@@ -83,8 +83,8 @@ fun ItemSummaryScreen(items: List<Item>, modifier: Modifier = Modifier, navContr
 @Composable
 fun PreviewSummary(){
     val items = listOf(
-        Item("Milk", "1 litre packet", 2),
-        Item("Bread", "Whole wheat", 1)
+        Item(itemName = "Milk", itemDescription = "1 litre packet", quantity = 2),
+        Item(itemName = "Bread", itemDescription = "Whole wheat", quantity = 1)
     )
     Column(modifier = Modifier.fillMaxSize()) {
         var navController = rememberNavController()

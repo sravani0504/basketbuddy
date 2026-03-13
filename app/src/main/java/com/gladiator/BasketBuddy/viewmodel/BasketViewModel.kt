@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.gladiator.BasketBuddy.model.ItemList
 import com.gladiator.BasketBuddy.repo.BasketRepository
 import com.gladiator.BasketBuddy.repo.GroupSession
+import com.gladiator.BasketBuddy.repo.ListSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ class BasketViewModel(
     private val repository: BasketRepository = BasketRepository()
 ) : ViewModel() {
 
+    private var allLists: List<ItemList> = emptyList()
     private val _lists = MutableStateFlow<List<ItemList>>(emptyList())
     val lists: StateFlow<List<ItemList>> = _lists.asStateFlow()
 
@@ -39,6 +41,7 @@ class BasketViewModel(
             val result = repository.getListsForGroup(group.groupCode)
 
             result.onSuccess {
+                allLists = it
                 _lists.value = it
                 _message.value = null
             }
@@ -53,12 +56,16 @@ class BasketViewModel(
     fun onSearch(query: String) {
         val searchText = query.trim()
         if (searchText.isBlank()) {
-            loadListsForSelectedGroup()
+            _lists.value = allLists
             return
         }
 
-        _lists.value = _lists.value.filter {
+        _lists.value = allLists.filter {
             it.name.contains(searchText, ignoreCase = true)
         }
+    }
+
+    fun onListSelected(itemList: ItemList) {
+        ListSession.setSelectedList(itemList)
     }
 }

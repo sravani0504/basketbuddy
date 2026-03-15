@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -50,7 +51,8 @@ fun ItemCard(
     index: Int,
     item: Item,
     onIncrement: () -> Unit,
-    onDecrement: () -> Unit
+    onDecrement: () -> Unit,
+    onDelete: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -92,6 +94,13 @@ fun ItemCard(
                         color = Color(0xFFB08968)
                     )
                 }
+                IconButton(onClick = onDelete) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.Red
+                    )
+                }
             }
 
             Text(
@@ -105,64 +114,31 @@ fun ItemCard(
 }
 
 
-//@Composable
-//fun ItemList(items: List<Item>) {
-//        LazyColumn(
-//            modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-//            itemsIndexed(items) { index, item ->
-//                Column {  }
-//                ItemCard(
-//                    index = index + 1,
-//                    item = item
-//                )
-//            }
-//       }
-////        Button(onClick = {onSaveClick()},
-////            modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)) {
-////            Text("Save")
-////        }
-//
-//}
+
 @Composable
 fun ItemList(
     items: List<Item>,
     onIncrement: (Int) -> Unit,
-    onDecrement: (Int) -> Unit
+    onDecrement: (Int) -> Unit,
+    onDelete: (Int) -> Unit,
+    modifier: Modifier= Modifier
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         itemsIndexed(items) { index, item ->
             ItemCard(
                 index = index + 1,
                 item = item,
                 onIncrement = { onIncrement(index) },
-                onDecrement = { onDecrement(index) }
+                onDecrement = { onDecrement(index) },
+                onDelete = { onDelete(index)}
             )
         }
     }
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ItemDisplayScreen(navController: NavController){
-//    val sampleItems=listOf(Item("Milk", "1 litre packet"),
-//        Item("Bread","Whole Wheat bread"))
-//    Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top){
-//        TopBar(title = "Groceries", onBackClick = {})
-//        Box(modifier = Modifier.weight(1f)){
-//            ItemList(sampleItems)
-//        }
-////        ItemList(sampleItems)
-//        Button(onClick = {}, modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 8.dp)) {
-//            Text("Save")
-//        }
-//        BasketBuddyBottomNav(navController)
-//    }
-//}
 
 
 @Preview(showBackground = true)
@@ -204,60 +180,55 @@ fun ItemDisplayScreen(
     ) {
         TopBar(title = selectedListName.ifBlank { "Items" }, onBackClick = { navController.popBackStack() })
 
-        Box(modifier = Modifier.weight(1f)) {
-            Column {
-                message?.let {
-                    Text(
-                        text = it,
-                        color = if (it == "Changes saved") Color(0xFF2E7D32) else MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+
+            message?.let {
+                Text(
+                    text = it,
+                    color = if (it == "Changes saved") Color(0xFF2E7D32)
+                    else MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+
+            Box(modifier = Modifier.weight(1f)) {
 
                 ItemList(
                     items = items,
                     onIncrement = viewModel::incrementQuantity,
-                    onDecrement = viewModel::decrementQuantity
+                    onDecrement = viewModel::decrementQuantity,
+                    onDelete = viewModel::deleteItem,
+                    modifier = Modifier.fillMaxSize()
                 )
 
-                if (items.isEmpty()) {
-                    Text(
-                        text = "No items added yet",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-                    )
-                }
-
-                Button(
+                FloatingActionButton(
                     onClick = {
-                        viewModel.saveChanges { }
+                        navController.navigate(Screen.AddItem.route)
                     },
                     modifier = Modifier
-                        .padding(16.dp).align(Alignment.CenterHorizontally),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB08968)),
-                    shape = RoundedCornerShape(12.dp)
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp),
+                    containerColor = Color(0xFFB08968)
                 ) {
-                    Text("Save Changes",
-                        fontSize = 16.sp,
-                        color = Color.White
-                    )
+                    Icon(Icons.Default.Add, contentDescription = "Add Item", tint = Color.White)
                 }
             }
 
-            FloatingActionButton(
+            Button(
                 onClick = {
-                    navController.navigate(Screen.AddItem.route)
+                    viewModel.saveChanges { }
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .fillMaxWidth()
                     .padding(16.dp),
-                containerColor = Color(0xFFB08968)
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB08968)),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Item",
-                    tint = Color.White
-                )
+                Text("Save Changes", fontSize = 16.sp, color = Color.White)
             }
         }
         BasketBuddyBottomNav(navController)

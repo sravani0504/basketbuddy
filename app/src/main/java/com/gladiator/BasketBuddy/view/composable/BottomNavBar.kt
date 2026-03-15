@@ -106,12 +106,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -130,6 +132,7 @@ import com.gladiator.BasketBuddy.repo.UserSession
 
 @Composable
 fun BasketBuddyBottomNav(navController: NavController) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
     //var selectedIndex by remember { mutableStateOf(0) }
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -184,18 +187,56 @@ fun BasketBuddyBottomNav(navController: NavController) {
             onClick = {
                 //selectedIndex = 2
                 //launchSingleTop = true
-                GroupSession.clear()
-                UserSession.clear()
-                navController.navigate("login")
+                showLogoutDialog=true
             },
             icon = { Icon(Icons.Default.Logout, contentDescription = "Logout") },
-            label = { Text("Logout") },
+            label = { Text("Logout", color = Color.Red) },
             colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFFB08968),
                 selectedTextColor = Color(0xFFB08968),
                 unselectedIconColor = Color.Gray,
                 unselectedTextColor = Color.Gray,
                 indicatorColor = Color(0xFFEAD8C0)
             )
+        )
+    }
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+
+            title = {
+                Text("Logout")
+            },
+
+            text = {
+                Text("Are you sure you want to logout?")
+            },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                        GroupSession.clear()
+                        UserSession.clear()
+
+                        navController.navigate("login") {
+                            popUpTo("home") { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                ) {
+                    Text("Logout")
+                }
+            },
+
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }

@@ -81,4 +81,16 @@ class ItemDisplayViewModel(
             }
         }
     }
+
+    fun deleteItem(index: Int) {
+
+        val updated = _items.value.toMutableList()
+        val removedItem = updated.removeAt(index)
+
+        _items.value = updated
+
+        viewModelScope.launch {
+            repository.deleteItem(removedItem)
+        }
+    }
 }

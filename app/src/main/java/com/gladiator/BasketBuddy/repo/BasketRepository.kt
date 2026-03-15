@@ -51,7 +51,7 @@ class BasketRepository {
                 items.add(item)
             }
 
-            Result.success(items.sortedBy { it.itemName.lowercase() })
+            Result.success(items)
         } catch (error: Exception) {
             Result.failure(error)
         }
@@ -117,6 +117,24 @@ class BasketRepository {
 
         } catch (e: Exception) {
             false
+        }
+    }
+
+    suspend fun deleteItem(item: Item): Result<Unit> {
+        return try {
+
+            itemsRef
+                .child(item.listId.toString())
+                .child(item.itemId)
+                .removeValue()
+                .await()
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+
         }
     }
 }

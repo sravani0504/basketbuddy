@@ -81,7 +81,35 @@ class AddItemViewModel(
             listId = selectedList.listId
         )
 
+//        viewModelScope.launch {
+//            val result = repository.addItem(item)
+//
+//            result.onSuccess {
+//                _uiState.value = AddItemUiState(selectedListName = selectedList.name)
+//                onSuccess()
+//            }
+//
+//            result.onFailure {
+//                _uiState.update { current ->
+//                    current.copy(message = it.message ?: "Unable to add item")
+//                }
+//            }
+//        }
+
         viewModelScope.launch {
+
+            val alreadyExists = repository.itemExists(
+                selectedList.listId,
+                state.itemName.trim()
+            )
+
+            if (alreadyExists) {
+                _uiState.update {
+                    it.copy(message = "Item already present")
+                }
+                return@launch
+            }
+
             val result = repository.addItem(item)
 
             result.onSuccess {
@@ -90,8 +118,8 @@ class AddItemViewModel(
             }
 
             result.onFailure {
-                _uiState.update { current ->
-                    current.copy(message = it.message ?: "Unable to add item")
+                _uiState.update {
+                    it.copy(message = it.message ?: "Unable to add item")
                 }
             }
         }
